@@ -136,6 +136,54 @@ This scaffold includes a comprehensive set of modern web development tools:
 3. **Start building** with intelligent code generation and assistance
 4. **Deploy with confidence** using the production-ready setup
 
+## 🤝 Contributing
+
+We welcome contributions from the community! This is an open-source project, and we'd love your help making it better.
+
+### How to Contribute
+
+1. **Fork the repository** and create your branch from `main`
+2. **Make your changes** - add features, fix bugs, or improve documentation
+3. **Test your changes** thoroughly
+4. **Submit a pull request** with a clear description of your improvements
+
+### Contribution Ideas
+
+- 🐛 Report bugs and issues
+- 💡 Suggest new features or improvements
+- 📝 Improve documentation
+- 🎨 Add new UI components or examples
+- ⚡ Performance optimizations
+- 🌍 Add translations for internationalization
+
+### Development Guidelines
+
+- Follow the existing code style and conventions
+- Write clear, descriptive commit messages
+- Add comments for complex logic
+- Update documentation for new features
+- Ensure TypeScript types are properly defined
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🌟 Show Your Support
+
+If you find this scaffold helpful, please consider:
+- ⭐ Starring the repository
+- 🐛 Reporting issues you encounter
+- 💬 Sharing it with other developers
+- 🤝 Contributing improvements
+
+## 📞 Community & Support
+
+- **Issues**: Report bugs or request features via GitHub Issues
+- **Discussions**: Join conversations in GitHub Discussions
+- **AI Assistance**: Get help building with [Z.ai](https://chat.z.ai)
+
 ---
 
 Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+
+**Open Source** • **Community Driven** • **AI Enhanced**

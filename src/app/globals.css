@@ -117,6 +117,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -134,12 +135,68 @@
   border-radius: 9999px;
   background-color: var(--primary);
   border: 3px solid var(--background);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.coffee-finder-user-pin div::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  background-color: var(--primary);
+  opacity: 0.4;
+  animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: -1;
+}
+
+@keyframes ping-slow {
+
+  75%,
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+
+
+.coffee-finder-shop-pin:hover {
+  z-index: 1000 !important;
 }
 
 .coffee-finder-shop-pin div {
   width: 18px;
   height: 18px;
   border-radius: 9999px;
-  background-color: var(--chart-1);
-  border: 1px solid var(--foreground);
+  background-color: #f97316;
+  /* Tailwind orange-500 */
+  border: 2px solid var(--background);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: center bottom;
+}
+
+.coffee-finder-shop-pin:hover div {
+  background-color: #ea580c;
+  /* Tailwind orange-600 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transform: scale(1.2) translateY(-2px);
+}
+
+/* Override Leaflet Popup Default Spacing for custom UI */
+.coffee-finder-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.coffee-finder-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 16px;
+  line-height: normal;
+}
+
+.coffee-finder-popup .leaflet-popup-tip-container {
+  margin-top: -1px;
 }

@@ -10,6 +10,7 @@ import { Footer } from '@/components/layout/Footer'
 import { LocationErrorState } from '@/components/layout/LocationErrorState'
 import { LocationLoadingState } from '@/components/layout/LocationLoadingState'
 import { CoffeeShopList } from '@/components/coffee/CoffeeShopList'
+import { ContributorSection } from '@/components/layout/ContributorSection'
 
 export default function Home() {
   const [location, setLocation] = useState<LocationState>({
@@ -244,6 +245,8 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        <ContributorSection />
       </main>
 
       <Footer />

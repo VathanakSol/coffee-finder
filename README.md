@@ -1,189 +1,123 @@
-# 🚀 Welcome To Coffee Finder
+# Coffee Finder
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+Coffee Finder is an open-source web application for discovering nearby coffee shops from your current location. It combines map-based exploration, a browsable results list, and a contributor-friendly codebase built with Next.js.
 
-## ✨ Technology Stack
+## Features
 
-This scaffold provides a robust foundation built with:
+- Discover nearby coffee shops using browser geolocation
+- Explore results on an interactive map
+- Browse shops in a companion list view
+- Search coffee shops by name or query
+- Show project contributors from GitHub
+- Use a responsive UI built with Tailwind CSS and shadcn/ui
 
-### 🎯 Core Framework
-- **⚡ Next.js 16** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+## Tech Stack
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+- Next.js 16
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- shadcn/ui
+- Lucide React
+- Prisma
+- NextAuth.js
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
+## Getting Started
 
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Fetch** - Promise-based HTTP request
+### Prerequisites
 
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
+- Node.js 20.9 or newer
+- npm
 
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
-
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
-
-## 🎯 Why This Scaffold?
-
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
-
-## 🚀 Quick Start
+### Install Dependencies
 
 ```bash
-# Install dependencies
-bun install
-
-# Start development server
-bun run dev
-
-# Build for production
-bun run build
-
-# Start production server
-bun start
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
+### Start the Development Server
 
-## 🤖 Powered by Z.ai
-
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
-
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
-
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
-
-## 📁 Project Structure
-
+```bash
+npm run dev
 ```
+
+Open http://localhost:3000 in your browser.
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```dotenv
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+GITHUB_TOKEN=
+```
+
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is used for map and location-based shop discovery.
+- `GITHUB_TOKEN` is optional, but recommended to avoid GitHub API rate limits for the contributor section.
+
+## Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run db:push
+npm run db:generate
+npm run db:migrate
+npm run db:reset
+```
+
+## Project Structure
+
+```text
 src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
+├── app/                # App Router pages and API routes
+├── components/         # Reusable UI and feature components
 ├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
+├── lib/                # Utilities and shared configuration
+└── types/              # Shared TypeScript types
 ```
 
-## 🎨 Available Features & Components
+## Deployment
 
-This scaffold includes a comprehensive set of modern web development tools:
+For clean-install environments, use:
 
-### 🧩 UI Components (shadcn/ui)
-- **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
-- **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
-- **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
-- **Navigation**: Breadcrumb, Menubar, Navigation Menu, Pagination
-- **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
-- **Data Display**: Badge, Avatar, Calendar
+```bash
+npm ci
+npm run build
+```
 
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
+Make sure `package-lock.json` stays committed and in sync with `package.json` so deployment installs remain reproducible.
 
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
+## Contributing
 
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Fetch + TanStack Query
-- **State Management**: Simple and scalable with Zustand
+Contributions are welcome.
 
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes.
+4. Test locally.
+5. Open a pull request with a clear description.
 
-## 🤝 Get Started with Z.ai
+Good contribution areas include:
 
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+- UI and UX improvements
+- Search and discovery enhancements
+- Geolocation and map behavior
+- Performance and accessibility
+- Documentation improvements
+- Bug fixes and test coverage
 
-## 🤝 Contributing
+## Open Source
 
-We welcome contributions from the community! This is an open-source project, and we'd love your help making it better.
+Coffee Finder is developed in the open. If you find the project useful, consider:
 
-### How to Contribute
+- Starring the repository
+- Opening issues for bugs or feature ideas
+- Submitting pull requests
+- Sharing the project with other developers
 
-1. **Fork the repository** and create your branch from `main`
-2. **Make your changes** - add features, fix bugs, or improve documentation
-3. **Test your changes** thoroughly
-4. **Submit a pull request** with a clear description of your improvements
+## License
 
-### Contribution Ideas
-
-- 🐛 Report bugs and issues
-- 💡 Suggest new features or improvements
-- 📝 Improve documentation
-- 🎨 Add new UI components or examples
-- ⚡ Performance optimizations
-- 🌍 Add translations for internationalization
-
-### Development Guidelines
-
-- Follow the existing code style and conventions
-- Write clear, descriptive commit messages
-- Add comments for complex logic
-- Update documentation for new features
-- Ensure TypeScript types are properly defined
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🌟 Show Your Support
-
-If you find this scaffold helpful, please consider:
-- ⭐ Starring the repository
-- 🐛 Reporting issues you encounter
-- 💬 Sharing it with other developers
-- 🤝 Contributing improvements
-
-## 📞 Community & Support
-
-- **Issues**: Report bugs or request features via GitHub Issues
-- **Discussions**: Join conversations in GitHub Discussions
-- **AI Assistance**: Get help building with [Z.ai](https://chat.z.ai)
-
----
-
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
-
-**Open Source** • **Community Driven** • **AI Enhanced**
+This project is open source and available under the MIT License.

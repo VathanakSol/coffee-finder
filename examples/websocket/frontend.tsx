@@ -7,11 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-type User = {
-  id: string;
-  username: string;
-}
-
 type Message = {
   id: string;
   username: string;
@@ -27,7 +22,6 @@ export default function SocketDemo() {
   const [isUsernameSet, setIsUsernameSet] = useState(false);
   const [socket, setSocket] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     // Connect to websocket server
@@ -56,23 +50,12 @@ export default function SocketDemo() {
       setMessages(prev => [...prev, msg]);
     });
 
-    socketInstance.on('user-joined', (data: { user: User; message: Message }) => {
+    socketInstance.on('user-joined', (data: { message: Message }) => {
       setMessages(prev => [...prev, data.message]);
-      setUsers(prev => {
-        if (!prev.find(u => u.id === data.user.id)) {
-          return [...prev, data.user];
-        }
-        return prev;
-      });
     });
 
-    socketInstance.on('user-left', (data: { user: User; message: Message }) => {
+    socketInstance.on('user-left', (data: { message: Message }) => {
       setMessages(prev => [...prev, data.message]);
-      setUsers(prev => prev.filter(u => u.id !== data.user.id));
-    });
-
-    socketInstance.on('users-list', (data: { users: User[] }) => {
-      setUsers(data.users);
     });
 
     return () => {

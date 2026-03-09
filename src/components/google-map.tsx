@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import type { Map as LeafletMap } from 'leaflet'
 
@@ -54,16 +54,6 @@ const LeafletMapInner = dynamic<LeafletMapInnerProps>(
     ssr: false,
   }
 )
-
-export function useGoogleMaps() {
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  useEffect(() => {
-    queueMicrotask(() => setIsLoaded(true))
-  }, [])
-
-  return isLoaded
-}
 
 export function GoogleMap({
   center,

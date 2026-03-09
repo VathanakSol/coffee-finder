@@ -1,4 +1,4 @@
-import { Coffee, Heart, Github, Twitter, Globe } from 'lucide-react'
+import { Coffee, Github, Globe } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()

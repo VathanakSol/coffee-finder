@@ -4,15 +4,19 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Coffee, Locate, Search, Loader2, Github, ArrowRight } from 'lucide-react'
-import { LocationState } from '@/types/coffee'
+import { CoffeeFilters, LocationState } from '@/types/coffee'
+import { AdvancedFiltersSheet } from '@/components/layout/AdvancedFiltersSheet'
 
 interface HeaderProps {
   location: LocationState
   searchQuery: string
   setSearchQuery: (query: string) => void
   loading: boolean
+  filters: CoffeeFilters
+  activeFilterCount: number
   onRefreshLocation: () => void
   onSearch: () => void
+  onApplyFilters: (filters: CoffeeFilters) => void
   onKeyDown: (e: React.KeyboardEvent) => void
 }
 
@@ -21,8 +25,11 @@ export function Header({
   searchQuery,
   setSearchQuery,
   loading,
+  filters,
+  activeFilterCount,
   onRefreshLocation,
   onSearch,
+  onApplyFilters,
   onKeyDown
 }: HeaderProps) {
   const [isFocused, setIsFocused] = useState(false)
@@ -119,6 +126,12 @@ export function Header({
                   </span>
                 )}
               </Button>
+
+              <AdvancedFiltersSheet
+                filters={filters}
+                activeFilterCount={activeFilterCount}
+                onApply={onApplyFilters}
+              />
 
               {/* Desktop Refresh Button */}
               <Button

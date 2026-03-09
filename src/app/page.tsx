@@ -1,16 +1,44 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useEffectEvent, startTransition } from 'react'
 import { Card } from '@/components/ui/card'
 import { GoogleMap, panToLocation } from '@/components/google-map'
 import { toast } from '@/hooks/use-toast'
-import { CoffeeShop, LocationState } from '@/types/coffee'
+import {
+  CoffeeFilters,
+  CoffeeShop,
+  DEFAULT_COFFEE_FILTERS,
+  LocationState,
+} from '@/types/coffee'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { LocationErrorState } from '@/components/layout/LocationErrorState'
 import { LocationLoadingState } from '@/components/layout/LocationLoadingState'
 import { CoffeeShopList } from '@/components/coffee/CoffeeShopList'
 import { ContributorSection } from '@/components/layout/ContributorSection'
+
+function sortCoffeeShops(shops: CoffeeShop[], sortBy: CoffeeFilters['sortBy']) {
+  const sortedShops = [...shops]
+
+  if (sortBy === 'rating') {
+    return sortedShops.sort((a, b) => {
+      const ratingDiff = (b.rating || 0) - (a.rating || 0)
+      if (ratingDiff !== 0) {
+        return ratingDiff
+      }
+
+      return (a.distance || Number.MAX_SAFE_INTEGER) - (b.distance || Number.MAX_SAFE_INTEGER)
+    })
+  }
+
+  if (sortBy === 'name') {
+    return sortedShops.sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  return sortedShops.sort(
+    (a, b) => (a.distance || Number.MAX_SAFE_INTEGER) - (b.distance || Number.MAX_SAFE_INTEGER)
+  )
+}
 
 export default function Home() {
   const [location, setLocation] = useState<LocationState>({
@@ -24,6 +52,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedShop, setSelectedShop] = useState<CoffeeShop | null>(null)
   const [discoveryMode, setDiscoveryMode] = useState<'all' | 'popular' | 'trending'>('all')
+  const [filters, setFilters] = useState<CoffeeFilters>(DEFAULT_COFFEE_FILTERS)
 
   // Get user's current location
   const getCurrentLocation = useCallback(() => {
@@ -78,12 +107,18 @@ export default function Home() {
   }, [getCurrentLocation])
 
   // Fetch nearby coffee shops
-  const fetchCoffeeShops = useCallback(async (lat: number, lng: number, query?: string) => {
+  const fetchCoffeeShops = useCallback(async (
+    lat: number,
+    lng: number,
+    query?: string,
+    radius = DEFAULT_COFFEE_FILTERS.radius
+  ) => {
     setLoading(true)
     try {
       const params = new URLSearchParams({
         lat: lat.toString(),
         lng: lng.toString(),
+        radius: radius.toString(),
         ...(query && { query })
       })
 
@@ -107,17 +142,33 @@ export default function Home() {
     }
   }, [])
 
+  const fetchCoffeeShopsForCurrentState = useEffectEvent((lat: number, lng: number) => {
+    fetchCoffeeShops(lat, lng, searchQuery, filters.radius)
+  })
+
   // Fetch coffee shops when location is available
   useEffect(() => {
     if (location.lat && location.lng) {
-      fetchCoffeeShops(location.lat, location.lng)
+      fetchCoffeeShopsForCurrentState(location.lat, location.lng)
     }
-  }, [location.lat, location.lng, fetchCoffeeShops])
+  }, [location.lat, location.lng])
 
   // Handle search
   const handleSearch = () => {
     if (location.lat && location.lng) {
-      fetchCoffeeShops(location.lat, location.lng, searchQuery)
+      fetchCoffeeShops(location.lat, location.lng, searchQuery, filters.radius)
+    }
+  }
+
+  const handleApplyFilters = (nextFilters: CoffeeFilters) => {
+    const radiusChanged = nextFilters.radius !== filters.radius
+
+    startTransition(() => {
+      setFilters(nextFilters)
+    })
+
+    if (radiusChanged && location.lat && location.lng) {
+      fetchCoffeeShops(location.lat, location.lng, searchQuery, nextFilters.radius)
     }
   }
 
@@ -134,8 +185,51 @@ export default function Home() {
     panToLocation(shop.location.lat, shop.location.lng, 17)
   }
 
+  const activeFilterCount = useMemo(() => {
+    let count = 0
+
+    if (filters.radius !== DEFAULT_COFFEE_FILTERS.radius) count += 1
+    if (filters.minRating > DEFAULT_COFFEE_FILTERS.minRating) count += 1
+    if (filters.openNow) count += 1
+    if (filters.onlyWithWebsite) count += 1
+    if (filters.onlyWithPhone) count += 1
+    if (filters.sortBy !== DEFAULT_COFFEE_FILTERS.sortBy) count += 1
+
+    return count
+  }, [filters])
+
+  const filteredShops = useMemo(() => {
+    return coffeeShops.filter((shop) => {
+      if ((shop.distance || Number.MAX_SAFE_INTEGER) > filters.radius) {
+        return false
+      }
+
+      if (filters.openNow && shop.isOpen !== true) {
+        return false
+      }
+
+      if (filters.onlyWithWebsite && !shop.website) {
+        return false
+      }
+
+      if (filters.onlyWithPhone && !shop.phone) {
+        return false
+      }
+
+      if (filters.minRating > 0 && (shop.rating || 0) < filters.minRating) {
+        return false
+      }
+
+      return true
+    })
+  }, [coffeeShops, filters])
+
+  const allSortedShops = useMemo(() => {
+    return sortCoffeeShops(filteredShops, filters.sortBy)
+  }, [filteredShops, filters.sortBy])
+
   const popularShops = useMemo(() => {
-    return [...coffeeShops]
+    return [...filteredShops]
       .sort((a, b) => {
         const ratingDiff = (b.rating || 0) - (a.rating || 0)
         if (ratingDiff !== 0) {
@@ -150,7 +244,7 @@ export default function Home() {
         return (a.distance || Number.MAX_SAFE_INTEGER) - (b.distance || Number.MAX_SAFE_INTEGER)
       })
       .slice(0, 10)
-  }, [coffeeShops])
+  }, [filteredShops])
 
   const trendingShops = useMemo(() => {
     const scoreShop = (shop: CoffeeShop) => {
@@ -162,10 +256,10 @@ export default function Home() {
       return openScore + ratingScore + engagementScore + infoScore - distancePenalty
     }
 
-    return [...coffeeShops]
+    return [...filteredShops]
       .sort((a, b) => scoreShop(b) - scoreShop(a))
       .slice(0, 10)
-  }, [coffeeShops])
+  }, [filteredShops])
 
   const visibleShops = useMemo(() => {
     if (discoveryMode === 'popular') {
@@ -176,11 +270,17 @@ export default function Home() {
       return trendingShops
     }
 
-    return coffeeShops
-  }, [coffeeShops, discoveryMode, popularShops, trendingShops])
+    return allSortedShops
+  }, [allSortedShops, discoveryMode, popularShops, trendingShops])
 
   const featuredPopular = popularShops[0]
   const featuredTrending = trendingShops[0]
+
+  useEffect(() => {
+    if (selectedShop && !visibleShops.some((shop) => shop.id === selectedShop.id)) {
+      setSelectedShop(null)
+    }
+  }, [selectedShop, visibleShops])
 
   // Prepare map markers
   const mapMarkers = visibleShops.map((shop) => ({
@@ -204,8 +304,11 @@ export default function Home() {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         loading={loading}
+        filters={filters}
+        activeFilterCount={activeFilterCount}
         onRefreshLocation={getCurrentLocation}
         onSearch={handleSearch}
+        onApplyFilters={handleApplyFilters}
         onKeyDown={handleKeyDown}
       />
 
